@@ -82,6 +82,10 @@ module RDF::LL1
     def scan(pattern)
       feed_me
       super
+    rescue
+      puts "scan for #{pattern.inspect} against #{peek(200).inspect}"
+      #get_byte
+      nil
     end
     
   private

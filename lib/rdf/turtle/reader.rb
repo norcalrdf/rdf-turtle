@@ -91,6 +91,10 @@ module RDF::Turtle
 
     # Productions
     
+    # [2] statement ::= directive "."  | triples "."
+    # Recovers to the end of a statement ('.' followed by something other than a digit or 'e')
+    production(:statement, :recover_to => /[^\.]*\.(?=[^\de])/)
+    
     # [4] prefixID defines a prefix mapping
     production(:prefixID) do |reader, phase, input, current, callback|
       next unless phase == :finish

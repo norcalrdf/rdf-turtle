@@ -187,7 +187,6 @@ module RDF::LL1
 
     ##
     # Returns first token in input stream
-    #
     # @return [Token]
     def first
       return nil unless scanner
@@ -221,18 +220,21 @@ module RDF::LL1
     ##
     # Skip input until a token is matched
     #
+    #
+    # @param [Regexp] regexp (nil)
+    #   If specified, skip this regular expression
     # @return [Token]
-    def recover
-      until scanner.eos? do
-        begin
-          shift
-          return first
-        rescue Error
-          # Ignore errors until something scans, or EOS.
-          scanner.skip(/./)
-        end
+    def recover(re = nil)
+      # Skip until a token is matched
+      begin
+        scanner.skip(re) if re
+        first
+      rescue Error
+        scanner.pos = scanner.pos + 1
+        retry
       end
     end
+
   protected
 
     # @return [StringScanner]
