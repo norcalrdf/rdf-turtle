@@ -1,0 +1,24 @@
+---
+date: Sat, 16 Jun 2012 17:47:52 GMT
+server: Apache/2.2.16 (Debian)
+etag: '1339865148.0'
+content-disposition: inline; filename="bad-02.ttl"
+content-length: '97'
+vary: Accept-Encoding
+content-type: text/plain; charset="UTF-8"
+:status:
+- '200'
+- Script output follows
+:content_type: text/plain
+:base_uri: !ruby/object:URI::HTTP
+  scheme: http
+  user: !!null 
+  password: !!null 
+  host: dvcs.w3.org
+  port: 80
+  path: /hg/rdf/raw-file/default/rdf-turtle/tests/bad-02.ttl
+  query: !!null 
+  opaque: !!null 
+  registry: !!null 
+  fragment: !!null 
+  parser: !!null 
