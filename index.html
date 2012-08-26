@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Rdf-turtle : Turtle reader/writer for Ruby" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Rdf-turtle</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/ruby-rdf/rdf-turtle">View on GitHub</a>
+
+          <h1 id="project_title">Rdf-turtle</h1>
+          <h2 id="project_tagline">Turtle reader/writer for Ruby</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/ruby-rdf/rdf-turtle/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/ruby-rdf/rdf-turtle/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>RDF::Turtle reader/writer</h1>
+
+<p><a href="https://dvcs.w3.org/hg/rdf/raw-file/efcf7e8a6272/rdf-turtle/index.html">Turtle</a> reader/writer for <a href="http://rubydoc.info/github/ruby-rdf/rdf/master/frames">RDF.rb</a> .</p>
+
+<h2>Description</h2>
+
+<p>This is a <a href="http://ruby-lang.org/">Ruby</a> implementation of a <a href="https://dvcs.w3.org/hg/rdf/raw-file/efcf7e8a6272/rdf-turtle/index.html">Turtle</a> parser for <a href="http://rubydoc.info/github/ruby-rdf/rdf/master/frames">RDF.rb</a>.</p>
+
+<h2>Features</h2>
+
+<p>RDF::Turtle parses <a href="https://dvcs.w3.org/hg/rdf/raw-file/efcf7e8a6272/rdf-turtle/index.html">Turtle</a> and <a href="http://www.w3.org/TR/rdf-testcases/#ntriples">N-Triples</a> into statements or triples. It also serializes to Turtle.</p>
+
+<p>Install with <code>gem install rdf-turtle</code></p>
+
+<ul>
+<li>100% free and unencumbered <a href="http://unlicense.org/">public domain</a> software.</li>
+<li>Implements a complete parser for <a href="https://dvcs.w3.org/hg/rdf/raw-file/efcf7e8a6272/rdf-turtle/index.html">Turtle</a>.</li>
+<li>Compatible with Ruby 1.8.7+, Ruby 1.9.x, and JRuby 1.4/1.5.</li>
+</ul><h2>Usage</h2>
+
+<p>Instantiate a reader from a local file:</p>
+
+<pre><code>graph = RDF::Graph.load("etc/doap.ttl", :format =&gt; :ttl)
+</code></pre>
+
+<p>Define <code>@base</code> and <code>@prefix</code> definitions, and use for serialization using <code>:base_uri</code> an <code>:prefixes</code> options.</p>
+
+<p>Canonicalize and validate using <code>:canonicalize</code> and <code>:validate</code> options.</p>
+
+<p>Write a graph to a file:</p>
+
+<pre><code>RDF::Turtle::Writer.open("etc/test.ttl") do |writer|
+   writer &lt;&lt; graph
+end
+</code></pre>
+
+<h2>Documentation</h2>
+
+<p>Full documentation available on <a href="http://rubydoc.info/github/ruby-rdf/rdf-turtle/master/file/README.markdown">Rubydoc.info</a></p>
+
+<h3>Principle Classes</h3>
+
+<ul>
+<li>{RDF::Turtle::Format}
+
+<ul>
+<li>{RDF::Turtle::TTL}
+Asserts :ttl format, text/turtle mime-type and .ttl file extension.</li>
+</ul>
+</li>
+<li>{RDF::Turtle::Reader}</li>
+<li>{RDF::Turtle::Writer}</li>
+</ul><h3>Variations from the spec</h3>
+
+<p>In some cases, the specification is unclear on certain issues:</p>
+
+<ul>
+<li>In section 2.1, the <a href="https://dvcs.w3.org/hg/rdf/raw-file/efcf7e8a6272/rdf-turtle/index.html">spec</a> indicates that "Literals ,
+prefixed names and IRIs may also contain escapes to encode surrounding syntax ...",
+however the description in 5.2 indicates that only IRI_REF and the various STRING_LITERAL terms
+are subject to unescaping. This means that an IRI which might otherwise be representable using a PNAME
+cannot if the IRI contains any characters that might need escaping. This implementation currently abides
+by this restriction. Presumably, this would affect both PNAME_NS and PNAME_LN terminals.
+(This is being tracked as issues <a href="http://www.w3.org/2011/rdf-wg/track/issues/67">67</a>).</li>
+<li>The EBNF definition of IRIREF seems malformed, and has no provision for ^, as discussed elsewhere in the spec.
+We presume that [#0000- ] is intended to be [#0000-#0020].</li>
+<li>The list example in section 6 uses a list on it's own, without a predicate or object, which is not allowed
+by the grammar (neither is a blankNodeProperyList). Either the EBNF should be updated to allow for these
+forms, or the examples should be changed such that ( ... ) and [ ... ] are used only in the context of being
+a subject or object. This implementation will generate triples, however an error will be generated if the
+parser is run in validation mode.</li>
+<li>For the time being, plain literals are generated without an xsd:string datatype, but literals with an xsd:string
+datatype are saved as non-datatyped triples in the graph. This will be updated in the future when the rest of the
+library suite is brought up to date.</li>
+</ul><h2>Implementation Notes</h2>
+
+<p>The reader uses a generic LL1 parser {RDF::LL1::Parser} and lexer {RDF::LL1::Lexer}. The parser takes branch and follow
+tables generated from the original <a href="https://dvcs.w3.org/hg/rdf/raw-file/efcf7e8a6272/rdf-turtle/turtle.bnf">Turtle EBNF Grammar</a> described in the <a href="https://dvcs.w3.org/hg/rdf/raw-file/efcf7e8a6272/rdf-turtle/index.html">specification</a>. Branch and Follow tables are specified in {RDF::Turtle::Meta}, which is in turn
+generated using etc/gramLL1.</p>
+
+<p>The branch rules indicate productions to be taken based on a current production. Terminals are denoted
+through a set of regular expressions used to match each type of terminal, described in {RDF::Turtle::Terminals}.</p>
+
+<p>etc/turtle.bnf is used to to generate a Notation3 representation of the grammar, a transformed LL1 representation and ultimately {RDF::Turtle::Meta}.</p>
+
+<p>Using SWAP utilities, this is done as follows:</p>
+
+<pre><code>python http://www.w3.org/2000/10/swap/grammar/ebnf2turtle.py \
+  etc/turtle.bnf \
+  ttl language \
+  'http://www.w3.org/ns/formats/Turtle#' &gt; |
+sed -e 's/^  ".*"$/  g:seq (&amp;)/'  &gt; etc/turtle.n3
+
+python http://www.w3.org/2000/10/swap/cwm.py etc/turtle.n3 \
+  http://www.w3.org/2000/10/swap/grammar/ebnf2bnf.n3 \
+  http://www.w3.org/2000/10/swap/grammar/first_follow.n3 \
+  --think --data &gt; etc/turtle-bnf.n3
+
+script/gramLL1 \
+  --grammar etc/turtle-ll1.n3 \
+  --lang 'http://www.w3.org/ns/formats/Turtle#language' \
+  --output lib/rdf/turtle/meta.rb
+</code></pre>
+
+<h2>Dependencies</h2>
+
+<ul>
+<li>
+<a href="http://ruby-lang.org/">Ruby</a> (&gt;= 1.8.7) or (&gt;= 1.8.1 with <a href="http://rubygems.org/gems/backports">Backports</a>)</li>
+<li>
+<a href="http://rubygems.org/gems/rdf">RDF.rb</a> (&gt;= 0.3.4)</li>
+</ul><h2>Installation</h2>
+
+<p>The recommended installation method is via <a href="http://rubygems.org/">RubyGems</a>.
+To install the latest official release of the <code>RDF::Turtle</code> gem, do:</p>
+
+<pre><code>% [sudo] gem install rdf-turtle
+</code></pre>
+
+<h2>Mailing List</h2>
+
+<ul>
+<li><a href="http://lists.w3.org/Archives/Public/public-rdf-ruby/">http://lists.w3.org/Archives/Public/public-rdf-ruby/</a></li>
+</ul><h2>Author</h2>
+
+<ul>
+<li>
+<a href="http://github.com/gkellogg">Gregg Kellogg</a> - <a href="http://greggkellogg.net/">http://greggkellogg.net/</a>
+</li>
+</ul><h2>Contributing</h2>
+
+<ul>
+<li>Do your best to adhere to the existing coding conventions and idioms.</li>
+<li>Don't use hard tabs, and don't leave trailing whitespace on any line.</li>
+<li>Do document every method you add using <a href="http://yardoc.org/">YARD</a> annotations. Read the
+<a href="http://rubydoc.info/docs/yard/file/docs/GettingStarted.md">tutorial</a> or just look at the existing code for examples.</li>
+<li>Don't touch the <code>.gemspec</code>, <code>VERSION</code> or <code>AUTHORS</code> files. If you need to
+change them, do so on your private branch only.</li>
+<li>Do feel free to add yourself to the <code>CREDITS</code> file and the corresponding
+list in the the <code>README</code>. Alphabetical order applies.</li>
+<li>Do note that in order for us to merge any non-trivial changes (as a rule
+of thumb, additions larger than about 15 lines of code), we need an
+explicit <a href="http://lists.w3.org/Archives/Public/public-rdf-ruby/2010May/0013.html">public domain dedication</a> on record from you.</li>
+</ul><h2>License</h2>
+
+<p>This is free and unencumbered public domain software. For more information,
+see <a href="http://unlicense.org/">http://unlicense.org/</a> or the accompanying {file:UNLICENSE} file.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Rdf-turtle maintained by <a href="https://github.com/ruby-rdf">ruby-rdf</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
