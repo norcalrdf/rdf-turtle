@@ -4,11 +4,11 @@
   <head>
     <meta charset='utf-8' />
     <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="Rdf-turtle : Turtle reader/writer for Ruby" />
+    <meta name="description" content="rdf-turtle : Turtle reader/writer for Ruby" />
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
-    <title>Rdf-turtle</title>
+    <title>rdf-turtle</title>
   </head>
 
   <body>
@@ -18,7 +18,7 @@
         <header class="inner">
           <a id="forkme_banner" href="https://github.com/ruby-rdf/rdf-turtle">View on GitHub</a>
 
-          <h1 id="project_title">Rdf-turtle</h1>
+          <h1 id="project_title">rdf-turtle</h1>
           <h2 id="project_tagline">Turtle reader/writer for Ruby</h2>
 
             <section id="downloads">
@@ -31,23 +31,24 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <h1>RDF::Turtle reader/writer</h1>
+        <h1>RDF::Turtle reader/writer <a href="http://travis-ci.org/ruby-rdf/rdf-turtle"><img src="https://secure.travis-ci.org/ruby-rdf/rdf-turtle.png?branch=master" alt="Build Status"></a>
+</h1>
 
-<p><a href="https://dvcs.w3.org/hg/rdf/raw-file/efcf7e8a6272/rdf-turtle/index.html">Turtle</a> reader/writer for <a href="http://rubydoc.info/github/ruby-rdf/rdf/master/frames">RDF.rb</a> .</p>
+<p><a href="http://www.w3.org/TR/2012/WD-turtle-20120710/">Turtle</a> reader/writer for <a href="http://rubydoc.info/github/ruby-rdf/rdf/master/frames">RDF.rb</a> .</p>
 
 <h2>Description</h2>
 
-<p>This is a <a href="http://ruby-lang.org/">Ruby</a> implementation of a <a href="https://dvcs.w3.org/hg/rdf/raw-file/efcf7e8a6272/rdf-turtle/index.html">Turtle</a> parser for <a href="http://rubydoc.info/github/ruby-rdf/rdf/master/frames">RDF.rb</a>.</p>
+<p>This is a <a href="http://ruby-lang.org/">Ruby</a> implementation of a <a href="http://www.w3.org/TR/2012/WD-turtle-20120710/">Turtle</a> parser for <a href="http://rubydoc.info/github/ruby-rdf/rdf/master/frames">RDF.rb</a>.</p>
 
 <h2>Features</h2>
 
-<p>RDF::Turtle parses <a href="https://dvcs.w3.org/hg/rdf/raw-file/efcf7e8a6272/rdf-turtle/index.html">Turtle</a> and <a href="http://www.w3.org/TR/rdf-testcases/#ntriples">N-Triples</a> into statements or triples. It also serializes to Turtle.</p>
+<p>RDF::Turtle parses <a href="http://www.w3.org/TR/2012/WD-turtle-20120710/">Turtle</a> and <a href="http://www.w3.org/TR/rdf-testcases/#ntriples">N-Triples</a> into statements or triples. It also serializes to Turtle.</p>
 
 <p>Install with <code>gem install rdf-turtle</code></p>
 
 <ul>
 <li>100% free and unencumbered <a href="http://unlicense.org/">public domain</a> software.</li>
-<li>Implements a complete parser for <a href="https://dvcs.w3.org/hg/rdf/raw-file/efcf7e8a6272/rdf-turtle/index.html">Turtle</a>.</li>
+<li>Implements a complete parser for <a href="http://www.w3.org/TR/2012/WD-turtle-20120710/">Turtle</a>.</li>
 <li>Compatible with Ruby 1.8.7+, Ruby 1.9.x, and JRuby 1.4/1.5.</li>
 </ul><h2>Usage</h2>
 
@@ -88,7 +89,7 @@ Asserts :ttl format, text/turtle mime-type and .ttl file extension.</li>
 <p>In some cases, the specification is unclear on certain issues:</p>
 
 <ul>
-<li>In section 2.1, the <a href="https://dvcs.w3.org/hg/rdf/raw-file/efcf7e8a6272/rdf-turtle/index.html">spec</a> indicates that "Literals ,
+<li>In section 2.1, the <a href="http://www.w3.org/TR/2012/WD-turtle-20120710/">spec</a> indicates that "Literals ,
 prefixed names and IRIs may also contain escapes to encode surrounding syntax ...",
 however the description in 5.2 indicates that only IRI_REF and the various STRING_LITERAL terms
 are subject to unescaping. This means that an IRI which might otherwise be representable using a PNAME
@@ -108,7 +109,7 @@ library suite is brought up to date.</li>
 </ul><h2>Implementation Notes</h2>
 
 <p>The reader uses a generic LL1 parser {RDF::LL1::Parser} and lexer {RDF::LL1::Lexer}. The parser takes branch and follow
-tables generated from the original <a href="https://dvcs.w3.org/hg/rdf/raw-file/efcf7e8a6272/rdf-turtle/turtle.bnf">Turtle EBNF Grammar</a> described in the <a href="https://dvcs.w3.org/hg/rdf/raw-file/efcf7e8a6272/rdf-turtle/index.html">specification</a>. Branch and Follow tables are specified in {RDF::Turtle::Meta}, which is in turn
+tables generated from the original <a href="http://dvcs.w3.org/hg/rdf/file/8610b8f58685/rdf-turtle/turtle.bnf">Turtle EBNF Grammar</a> described in the <a href="http://www.w3.org/TR/2012/WD-turtle-20120710/">specification</a>. Branch and Follow tables are specified in {RDF::Turtle::Meta}, which is in turn
 generated using etc/gramLL1.</p>
 
 <p>The branch rules indicate productions to be taken based on a current production. Terminals are denoted
@@ -184,7 +185,7 @@ see <a href="http://unlicense.org/">http://unlicense.org/</a> or the accompanyin
     <!-- FOOTER  -->
     <div id="footer_wrap" class="outer">
       <footer class="inner">
-        <p class="copyright">Rdf-turtle maintained by <a href="https://github.com/ruby-rdf">ruby-rdf</a></p>
+        <p class="copyright">rdf-turtle maintained by <a href="https://github.com/ruby-rdf">ruby-rdf</a></p>
         <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
       </footer>
     </div>
